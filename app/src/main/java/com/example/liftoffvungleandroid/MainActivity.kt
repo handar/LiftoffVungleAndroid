@@ -72,11 +72,6 @@ class MainActivity : ComponentActivity() {
                             // Add your code to show the MREC here
                         }
 
-
-
-
-
-
                     )
 
                 }
