@@ -52,7 +52,7 @@ fun HomeScreen(
 
         //Play a Rewarded Video Ad once it's loaded
         Button(onClick = onShowRewardedAdClicked) {
-            Text(text = "Show Rewarded Vido")
+            Text(text = "Show Rewarded Video")
         }
 
         //Create and Load a Banner Ad
