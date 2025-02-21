@@ -20,7 +20,10 @@ class AdManager(private val context: Context) : InterstitialAdListener{
 
     //Placement ID variables
     private val interstitialPlacementId = "DEFAULT-0328593"
-    //private val rewardedVideoPlacementId = "67b80530def9e46cb8d322aa"
+    private val rewardedVideoPlacementId = "REWARDED_VIDEO_DEFAULT_NON_BIDDING-8683118"
+    private val bannerPlacementId = "BANNER_DEFAULT_NON_BIDDING-6185409"
+    private val mrecPlacementId = "MREC_DEFAULT_NON_BIDDING-5747326"
+
 
     //Interstitial handling
     fun createAndLoadInterstitial() {
