@@ -6,16 +6,17 @@ import com.vungle.ads.BaseAd
 import com.vungle.ads.InterstitialAd
 import com.vungle.ads.InterstitialAdListener
 import com.vungle.ads.RewardedAd
+import com.vungle.ads.RewardedAdListener
 import com.vungle.ads.VungleBannerView
 import com.vungle.ads.VungleError
 
 //Ad Manager Class to load and show ad placements
-class AdManager(private val context: Context) : InterstitialAdListener{
+class AdManager(private val context: Context) : InterstitialAdListener, RewardedAdListener {
     private val TAG = "VungleAdManager" //Tag for logging
 
     //Declare Ad variables
     private var interstitialAd: InterstitialAd? = null
-    private var rewardedVideoAd: RewardedAd? = null
+    private var rewardedAd: RewardedAd? = null
     private var bannerAd: VungleBannerView? = null //'BannerAd' is deprecated. Use VungleBannerView instead
 
     //Placement ID variables
@@ -76,5 +77,26 @@ class AdManager(private val context: Context) : InterstitialAdListener{
         Log.d(TAG, "Ad Started for Placement ID: ${baseAd.placementId} / Creative ID: ${baseAd.creativeId}") //Log ad start for placement and creative ID
     }
 
+    //Rewarded Video Handling
+    fun createAndLoadRewardedVideo() {
+        rewardedAd = RewardedAd(context, rewardedVideoPlacementId, AdConfig().apply {
+        }).apply {
+            adListener = this@AdManager
+            load()
+        }
+    }
+
+    fun playRewardedVideo() {
+        if (rewardedAd?.canPlayAd() == true) {
+            rewardedAd?.play()
+        } else {
+            Log.d(TAG, "Rewarded Video is not ready to play")
+        }
+    }
+
+    //RewardedAdListener callback methods
+    override fun onAdRewarded(baseAd: BaseAd) {
+        Log.d(TAG, "Ad Rewarded for Placement ID: ${baseAd.placementId} / Creative ID: ${baseAd.creativeId}") //Log ad reward for placement and creative ID
+    }
 
 }

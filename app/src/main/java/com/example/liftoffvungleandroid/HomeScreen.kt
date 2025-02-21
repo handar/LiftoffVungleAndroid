@@ -51,7 +51,7 @@ fun HomeScreen(
         }
 
         //Play a Rewarded Video Ad once it's loaded
-        Button(onClick = onShowInterstitialClicked) {
+        Button(onClick = onShowRewardedAdClicked) {
             Text(text = "Show Rewarded Video")
         }
 

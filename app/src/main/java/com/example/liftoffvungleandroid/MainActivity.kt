@@ -55,11 +55,11 @@ class MainActivity : ComponentActivity() {
                         },
                         onLoadRewardedAdClicked = {
                             Log.d(TAG, "Load Rewarded Video clicked!")
-                            // Add your code to load the Rewarded Video here
+                            adManager.createAndLoadRewardedVideo()
                         },
                         onShowRewardedAdClicked = {
                             Log.d(TAG, "Show Rewarded Video clicked!")
-                            // Add your code to show the Rewarded Video here
+                            adManager.playRewardedVideo()
                         },
                         onLoadBannerClicked = {
                             Log.d(TAG, "Load Banner clicked!")
