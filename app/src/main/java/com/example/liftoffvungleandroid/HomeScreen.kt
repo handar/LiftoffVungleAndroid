@@ -1,5 +1,6 @@
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -26,7 +27,9 @@ fun HomeScreen(
     onShowMRECClicked: () -> Unit = {}
 ) {
     Column(
-        modifier = Modifier.padding(16.dp), // Add padding to the column
+        modifier = Modifier
+            .padding(16.dp) // Add padding to the column
+            .fillMaxSize(), // Fill the available space
         verticalArrangement = Arrangement.Center, // Center items vertically
         horizontalAlignment = Alignment.CenterHorizontally // Center items horizontally
     ) { //Add padding to the column
