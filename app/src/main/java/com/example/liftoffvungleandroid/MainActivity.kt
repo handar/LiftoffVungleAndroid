@@ -1,7 +1,7 @@
 package com.example.liftoffvungleandroid
 
 import HomeScreen
-import android.content.ContentValues.TAG
+//import android.content.ContentValues.TAG
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -21,6 +21,9 @@ import com.vungle.ads.VungleAds
 import com.vungle.ads.VungleError
 
 class MainActivity : ComponentActivity() {
+    private val TAG = "VungleAdManager" //Tag for logging
+    private lateinit var adManager: AdManager // Instance of AdManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -34,6 +37,9 @@ class MainActivity : ComponentActivity() {
             }
         })
 
+        // Initialize AdManager
+        adManager = AdManager(this)
+
         enableEdgeToEdge()
         setContent {
             LiftoffVungleAndroidTheme {
@@ -41,11 +47,11 @@ class MainActivity : ComponentActivity() {
                     HomeScreen( //Pass the lambda functions to the HomeScreen and load the view
                         onLoadInterstitialClicked = {
                             Log.d(TAG, "Load Interstitial clicked!")
-                            // Add your code to load the interstitial here
+                            adManager.createAndLoadInterstitial()
                         },
                         onShowInterstitialClicked = {
                             Log.d(TAG, "Show Interstitial clicked!")
-                            // Add your code to show the interstitial here
+                            adManager.playInterstitial()
                         },
                         onLoadRewardedAdClicked = {
                             Log.d(TAG, "Load Rewarded Video clicked!")
