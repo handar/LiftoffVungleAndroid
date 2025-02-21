@@ -24,7 +24,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         //Initialize Vungle SDK
-        VungleAds.init(this, "643d1db1143d3bfd6bcf6510", object : InitializationListener {
+        VungleAds.init(this, "67b80530def9e46cb8d322aa", object : InitializationListener {
             override fun onSuccess() {
                 Log.d(TAG, "Vungle SDK init onSuccess()")
             }
