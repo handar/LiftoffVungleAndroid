@@ -1,5 +1,6 @@
 package com.example.liftoffvungleandroid
 
+import HomeScreen
 import android.content.ContentValues.TAG
 import android.os.Bundle
 import android.util.Log
@@ -37,10 +38,47 @@ class MainActivity : ComponentActivity() {
         setContent {
             LiftoffVungleAndroidTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
+                    HomeScreen( //Pass the lambda functions to the HomeScreen and load the view
+                        onLoadInterstitialClicked = {
+                            Log.d(TAG, "Load Interstitial clicked!")
+                            // Add your code to load the interstitial here
+                        },
+                        onShowInterstitialClicked = {
+                            Log.d(TAG, "Show Interstitial clicked!")
+                            // Add your code to show the interstitial here
+                        },
+                        onLoadRewardedAdClicked = {
+                            Log.d(TAG, "Load Rewarded Video clicked!")
+                            // Add your code to load the Rewarded Video here
+                        },
+                        onShowRewardedAdClicked = {
+                            Log.d(TAG, "Show Rewarded Video clicked!")
+                            // Add your code to show the Rewarded Video here
+                        },
+                        onLoadBannerClicked = {
+                            Log.d(TAG, "Load Banner clicked!")
+                            // Add your code to load the Banner here
+                        },
+                        onShowBannerClicked = {
+                            Log.d(TAG, "Show Banner clicked!")
+                            // Add your code to show the Banner here
+                        },
+                        onLoadMRECClicked = {
+                            Log.d(TAG, "Load MREC clicked!")
+                            // Add your code to load the MREC here
+                        },
+                        onShowMRECClicked = {
+                            Log.d(TAG, "Show MREC clicked!")
+                            // Add your code to show the MREC here
+                        }
+
+
+
+
+
+
                     )
+
                 }
             }
         }
