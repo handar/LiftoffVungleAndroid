@@ -33,7 +33,7 @@ fun HomeScreen(
         modifier = modifier
             .padding(16.dp) //Add padding to the column
             .fillMaxSize(), //Fill the available space
-        verticalArrangement = Arrangement.SpaceAround, //Center items vertically
+        verticalArrangement = Arrangement.SpaceAround, //Space evenly
         horizontalAlignment = Alignment.CenterHorizontally //Center items horizontally
     ) {
         //Show the MREC Banner Ad when available
