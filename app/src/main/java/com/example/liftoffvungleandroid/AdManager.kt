@@ -1,17 +1,21 @@
 package com.example.liftoffvungleandroid
 import android.content.Context
 import android.util.Log
+import android.widget.FrameLayout
 import com.vungle.ads.AdConfig
+import com.vungle.ads.BannerAdListener
 import com.vungle.ads.BaseAd
 import com.vungle.ads.InterstitialAd
 import com.vungle.ads.InterstitialAdListener
 import com.vungle.ads.RewardedAd
 import com.vungle.ads.RewardedAdListener
+import com.vungle.ads.VungleAdSize
 import com.vungle.ads.VungleBannerView
 import com.vungle.ads.VungleError
 
 //Ad Manager Class to load and show ad placements
-class AdManager(private val context: Context) : InterstitialAdListener, RewardedAdListener {
+class AdManager(private val context: Context) : InterstitialAdListener, RewardedAdListener,
+    BannerAdListener {
     private val TAG = "VungleAdManager" //Tag for logging
 
     //Declare Ad variables
@@ -22,9 +26,13 @@ class AdManager(private val context: Context) : InterstitialAdListener, Rewarded
     //Placement ID variables
     private val interstitialPlacementId = "DEFAULT-0328593"
     private val rewardedVideoPlacementId = "REWARDED_VIDEO_DEFAULT_NON_BIDDING-8683118"
-    private val bannerPlacementId = "BANNER_DEFAULT_NON_BIDDING-6185409"
+     val bannerPlacementId = "BANNER_DEFAULT_NON_BIDDING-6185409"
     private val mrecPlacementId = "MREC_DEFAULT_NON_BIDDING-5747326"
 
+    private var bannerAdContainer: FrameLayout? = null  // Jetpack compose does not include RelativeLayout or FrameLayout. My dynamic "bannerAdContainer".
+
+
+    //==================================================================================================================
 
     //Interstitial handling
     fun createAndLoadInterstitial() {
@@ -71,11 +79,13 @@ class AdManager(private val context: Context) : InterstitialAdListener, Rewarded
 
     override fun onAdLoaded(baseAd: BaseAd) {
         Log.d(TAG, "Ad Loaded for Placement ID: ${baseAd.placementId} / Creative ID: ${baseAd.creativeId}") //Log ad load for placement and creative ID
-    }
+        }
 
     override fun onAdStart(baseAd: BaseAd) {
         Log.d(TAG, "Ad Started for Placement ID: ${baseAd.placementId} / Creative ID: ${baseAd.creativeId}") //Log ad start for placement and creative ID
     }
+
+    //==================================================================================================================
 
     //Rewarded Video Handling
     fun createAndLoadRewardedVideo() {
@@ -98,5 +108,47 @@ class AdManager(private val context: Context) : InterstitialAdListener, Rewarded
     override fun onAdRewarded(baseAd: BaseAd) {
         Log.d(TAG, "Ad Rewarded for Placement ID: ${baseAd.placementId} / Creative ID: ${baseAd.creativeId}") //Log ad reward for placement and creative ID
     }
+
+    //==================================================================================================================
+
+    //Banner Ad Handling
+    fun createAndLoadBanner() {
+        bannerAdContainer = FrameLayout(context) // Create the banner container upon loading it
+
+        //Load the banner
+        bannerAd = VungleBannerView(context, bannerPlacementId, VungleAdSize.BANNER).apply {
+            adListener = this@AdManager
+            load()
+        }
+        Log.d(TAG, "Banner ad is loading")
+    }
+
+    fun playBanner(): FrameLayout? { //returns the bannerAdContainer for us to use
+        //Banner has loaded and is ready to play. Show the loaded banner inside of the banner container we created.
+        return bannerAdContainer?.apply {
+            bannerAd?.let { ad -> //Check if Banner ad is not null and run the code inside the block if not null
+                // Ensure VungleBannerView is inside a new FrameLayout before adding it
+
+                val params = FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.WRAP_CONTENT,
+                    FrameLayout.LayoutParams.WRAP_CONTENT
+                )
+
+
+                this.addView(ad,params) //Adding bannerAd to the bannerAdContainer
+                Log.d(TAG, "Banner ad added to container")
+            }
+        }
+    }
+
+    fun dismissBanner(){
+        bannerAdContainer?.removeAllViews()
+        bannerAd?.finishAd()
+        bannerAd?.adListener =null
+        bannerAd = null
+
+        Log.d(TAG, "Banner ad dismissed from container")
+    }
+
 
 }

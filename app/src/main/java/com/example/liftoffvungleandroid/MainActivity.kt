@@ -63,11 +63,15 @@ class MainActivity : ComponentActivity() {
                         },
                         onLoadBannerClicked = {
                             Log.d(TAG, "Load Banner clicked!")
-                            // Add your code to load the Banner here
+                            adManager.createAndLoadBanner()
                         },
                         onShowBannerClicked = {
                             Log.d(TAG, "Show Banner clicked!")
-                            // Add your code to show the Banner here
+                            adManager.playBanner()
+                        },
+                        onDismissBannerClicked = {
+                            Log.d(TAG, "Dismiss Banner clicked!")
+                            adManager.dismissBanner()
                         },
                         onLoadMRECClicked = {
                             Log.d(TAG, "Load MREC clicked!")
