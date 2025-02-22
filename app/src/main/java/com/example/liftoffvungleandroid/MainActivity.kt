@@ -28,7 +28,7 @@ class MainActivity : ComponentActivity() {
         VungleAds.init(this, appID, object : InitializationListener {
             override fun onSuccess() {
                 Log.d(TAG, "Vungle SDK init onSuccess()")
-                adManager.loadBanner() //load banner after Vungle SDK is initialized
+                adManager.loadBanner() //load banners after Vungle SDK is initialized
             }
             override fun onError(vungleError: VungleError) {
                 Log.d(TAG, "onError(): ${vungleError.localizedMessage}")
