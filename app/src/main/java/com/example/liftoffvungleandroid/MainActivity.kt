@@ -17,6 +17,7 @@ import com.vungle.ads.VungleError
 
 class MainActivity : ComponentActivity() {
     private val TAG = "VungleAdManager" //Tag for logging
+    private val appID = "67b80530def9e46cb8d322aa" //Vungle App ID
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,7 +25,7 @@ class MainActivity : ComponentActivity() {
         val adManager = AdManager(this)
 
         //Initialize Vungle SDK
-        VungleAds.init(this, "67b80530def9e46cb8d322aa", object : InitializationListener {
+        VungleAds.init(this, appID, object : InitializationListener {
             override fun onSuccess() {
                 Log.d(TAG, "Vungle SDK init onSuccess()")
                 adManager.loadBanner()
