@@ -31,14 +31,14 @@ fun HomeScreen(
 
     Column(
         modifier = modifier
-            .padding(16.dp) // Add padding to the column
-            .fillMaxSize(), // Fill the available space
-        verticalArrangement = Arrangement.SpaceAround, // Center items vertically
-        horizontalAlignment = Alignment.CenterHorizontally // Center items horizontally
+            .padding(16.dp) //Add padding to the column
+            .fillMaxSize(), //Fill the available space
+        verticalArrangement = Arrangement.SpaceAround, //Center items vertically
+        horizontalAlignment = Alignment.CenterHorizontally //Center items horizontally
     ) {
         //Show the MREC Banner Ad when available
         bannerAdMREC?.let { ad ->
-            AndroidView(factory = { context -> // Use AndroidView to display non-composable views
+            AndroidView(factory = { context -> //Use AndroidView to display non-composable views
                 FrameLayout(context).apply {
                     val params = FrameLayout.LayoutParams(
                         FrameLayout.LayoutParams.WRAP_CONTENT,
