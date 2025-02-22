@@ -1,160 +1,120 @@
-import android.view.ViewGroup
+import android.util.Log
 import android.widget.FrameLayout
-import android.widget.RelativeLayout
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import com.example.liftoffvungleandroid.AdManager
 
-@Preview(showBackground = true)
+private val TAG = "VungleAdManager" //Tag for logging
+
 @Composable
 fun HomeScreen(
-    //Lambda for each button click
-    onLoadInterstitialClicked: () -> Unit = {},
-    onShowInterstitialClicked: () -> Unit = {},
-
-    onLoadRewardedAdClicked: () -> Unit = {},
-    onShowRewardedAdClicked: () -> Unit = {},
-
-    onLoadBannerClicked: () -> Unit = {},
-    onShowBannerClicked: () -> FrameLayout? = {null}, // Get the banner frameLayout
-    onDismissBannerClicked: () -> Unit = {},
-
-    onLoadMRECClicked: () -> Unit = {},
-    onShowMRECClicked: () -> Unit = {}
+    adManager: AdManager,
+    modifier: Modifier = Modifier
 ) {
-    val bannerFrameLayout = remember { mutableStateOf<FrameLayout?>(null) }
+    //Observing Banner Ad state
+    val bannerAd by adManager.bannerAdState.collectAsState()
+    val bannerAdMREC by adManager.bannerAdStateMREC.collectAsState()
 
-//    Column(
-//        verticalArrangement = Arrangement.SpaceAround
-//    ) {
-//    Box(
-//        modifier = Modifier
-//            .fillMaxSize()
-//            .background(Color.Cyan) // Background color for the outer Box
-//    ) {
-        Column(
-            modifier = Modifier
-                .padding(16.dp) // Add padding to the column
-                .fillMaxSize(), // Fill the available space
-            verticalArrangement = Arrangement.Center, // Center items vertically
-            horizontalAlignment = Alignment.CenterHorizontally // Center items horizontally
-        ) { //Add padding to the column
-            Text(text = "Welcome to My App!")
-
-            //Create and Load an Interstitial Ad
-            Button(onClick = onLoadInterstitialClicked) {
-                Text(text = "Load Interstitial")
-            }
-
-            //Play an Interstitial Ad once it's loaded
-            Button(onClick = onShowInterstitialClicked) {
-                Text(text = "Show Interstitial")
-            }
-
-            //Create and Load a Rewarded Video Ad
-            Button(onClick = onLoadRewardedAdClicked) {
-                Text(text = "Load Rewarded Video")
-            }
-
-            //Play a Rewarded Video Ad once it's loaded
-            Button(onClick = onShowRewardedAdClicked) {
-                Text(text = "Show Rewarded Video")
-            }
-
-            //Create and Load a Banner Ad
-            Button(onClick = onLoadBannerClicked) {
-                Text(text = "Load Banner")
-            }
-
-            //Play a Banner Ad once it's loaded
-            Button(onClick = {
-                bannerFrameLayout.value = onShowBannerClicked()
+    Column(
+        modifier = modifier
+            .padding(16.dp) // Add padding to the column
+            .fillMaxSize(), // Fill the available space
+        verticalArrangement = Arrangement.SpaceAround, // Center items vertically
+        horizontalAlignment = Alignment.CenterHorizontally // Center items horizontally
+    ) {
+        //Show the MREC Banner Ad when available
+        bannerAdMREC?.let { ad ->
+            AndroidView(factory = { context -> // Use AndroidView to display non-composable views
+                FrameLayout(context).apply {
+                    val params = FrameLayout.LayoutParams(
+                        FrameLayout.LayoutParams.WRAP_CONTENT,
+                        FrameLayout.LayoutParams.WRAP_CONTENT
+                    )
+                    addView(ad, params)
                 }
-            ) {
-                Text(text = "Show Banner")
-            }
+            })
+        } ?: Text(text = "MREC Banner Placeholder", color = Color.White)
 
-            //Dismiss a Banner Ad once it's loaded
-            Button(onClick = {
-                bannerFrameLayout.value = null //Remove from UI
-                onDismissBannerClicked() //Call AdManager to remove banner
-            }) {
-                Text(text = "Dismiss Banner")
-            }
+        Text(text = "Welcome to My App!")
 
-            //Create and Load a MREC Banner Ad
-            Button(onClick = onLoadBannerClicked) {
-                Text(text = "Load MREC")
-            }
-
-//            //Play a MCREC Banner Ad once it's loaded
-//            Button(onClick = onShowBannerClicked) {
-//                Text(text = "Show MREC")
-//            }
-            Spacer(modifier = Modifier.height(20.dp))
-
-            //Show the Banner Ad when available
-            Box(
-                modifier = Modifier
-                    .height(50.dp)
-                    .fillMaxWidth()
-                    .background(Color.Blue), //Default blue background before ad loads
-                contentAlignment = Alignment.Center
-            ) {
-                bannerFrameLayout.value?.let { frameLayout ->
-                    AndroidView(factory = { frameLayout }, modifier = Modifier.align(Alignment.Center))
-                } ?: Text(text = "Banner Placeholder", color = Color.White)
-            }
+        //Create and Load an Interstitial Ad
+        Button(onClick = {
+            Log.d(TAG, "Load Interstitial clicked!")
+            adManager.createAndLoadInterstitial()
+        }) {
+            Text(text = "Load Interstitial")
         }
-        // Add a bottom container
-//        val bannerAdContainer = Box( // Renamed to bannerAdContainer
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .height(50.dp)
-//                .background(Color.LightGray) // Background color for the bottom container
-//                .align(Alignment.BottomCenter)
-//        ){
-//            Text(text = "Bottom Container", modifier = Modifier.align(Alignment.Center))
-//        }
 
+        //Play an Interstitial Ad once it's loaded
+        Button(onClick = {
+            Log.d(TAG, "Show Interstitial clicked!")
+            adManager.playInterstitial()
+        }) {
+            Text(text = "Show Interstitial")
+        }
 
-//        AndroidView(
-//            factory = { context ->
-//                RelativeLayout(context).apply {
-//                    val bannerAdContainer = FrameLayout(context).apply{
-//                        id = 12345 // Unique ID for banner container
-//
-//
-//                    }
-//
-//
-//                }
-//            },
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .height(50.dp)
-//        )
-        //}
-//    }
+        //Create and Load a Rewarded Video Ad
+        Button(onClick = {
+            Log.d(TAG, "Load Rewarded Video clicked!")
+            adManager.createAndLoadRewardedVideo()
+        }) {
+            Text(text = "Load Rewarded Video")
+        }
+
+        //Play a Rewarded Video Ad once it's loaded
+        Button(onClick = {
+            Log.d(TAG, "Show Rewarded Video clicked!")
+            adManager.playRewardedVideo()
+        }) {
+            Text(text = "Show Rewarded Video")
+        }
+
+        //LoadBanner Ad once it's loaded
+        Button(onClick = {
+            Log.d(TAG, "Load Banner clicked!")
+            adManager.loadBanner()
+        }) {
+            Text(text = "Load Banner")
+        }
+
+        //Dismiss and reload a Banner Ad once it's loaded
+        Button(onClick = {
+            Log.d(TAG, "Dismiss Banner clicked!")
+            adManager.dismissBanner()
+        }) {
+            Text(text = "Dismiss Banner")
+        }
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        //Show the Banner Ad when available
+        bannerAd?.let { ad ->
+            AndroidView(factory = { context ->
+                FrameLayout(context).apply {
+                    val params = FrameLayout.LayoutParams(
+                        FrameLayout.LayoutParams.WRAP_CONTENT,
+                        FrameLayout.LayoutParams.WRAP_CONTENT
+                    )
+                    addView(ad, params)
+                }
+            })
+        } ?: Text(text = "Banner Placeholder", color = Color.White)
+    }
 }
+
 
 
