@@ -24,7 +24,7 @@ class MainActivity : ComponentActivity() {
         // Initialize AdManager
         val adManager = AdManager(this) //adManager is an instance of AdManager
 
-        //Initialize Vungle SD
+        //Initialize Vungle S
         VungleAds.init(this, appID, object : InitializationListener {
             override fun onSuccess() {
                 Log.d(TAG, "Vungle SDK init onSuccess()")
