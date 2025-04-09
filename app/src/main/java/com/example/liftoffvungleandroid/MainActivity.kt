@@ -22,25 +22,35 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // Initialize AdManager
-        val adManager = AdManager(this)
+        val adManager = AdManager(this) //adManager is an instance of AdManager
 
         //Initialize Vungle SDK
         VungleAds.init(this, appID, object : InitializationListener {
             override fun onSuccess() {
                 Log.d(TAG, "Vungle SDK init onSuccess()")
+                adManager.loadAppOpen()
                 adManager.loadBanner() //load banners after Vungle SDK is initialized
+                adManager.loadInline() //load inline after Vungle SDK is initialized
             }
             override fun onError(vungleError: VungleError) {
                 Log.d(TAG, "onError(): ${vungleError.localizedMessage}")
             }
         })
+
+        //Init Vungle when I'm ready
+        //Initialize Vungle when needed
+        //adManager.initializeVungle()
+
         enableEdgeToEdge()
         setContent {
-            LiftoffVungleAndroidTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    HomeScreen(
-                        adManager, //Pass AdManager to HomeScreen
-                        Modifier.padding(innerPadding)
+            LiftoffVungleAndroidTheme { // 1️⃣ Applies the app’s theme
+                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding -> // 2️⃣ Creates a scaffold layout
+                    HomeScreen( // 3️⃣ Loads the main UI screen
+                        adManager, // 4️⃣ Passes the AdManager instance to HomeScreen
+                        //By passing AdManager to HomeScreen, the UI screen
+                        //can request and display ads properly. The HomeScreen
+                        //has the buttons that will load and show an ad.
+                        Modifier.padding(innerPadding) // 5️⃣ Adjusts padding for system bars
                     )
                 }
             }
